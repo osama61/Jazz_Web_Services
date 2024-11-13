@@ -1,4 +1,4 @@
-package com.jazzservices.demo;
+package com.jazzservices;
 
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.Test;
