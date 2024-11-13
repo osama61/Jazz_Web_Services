@@ -46,4 +46,14 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}  # Example of using GitHub Secrets if required
 
       # Step 6: Upload test results
-      -
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: target/allure-results  # This should match your Allure results path
+
+      # Step 7: Generate Allure Report
+      - name: Generate Allure report
+        run: |
+          allure generate target/allure-results --clean -o target/allure-report
+        continue-on-error: true  # This allows the workflow to continue even if Allure fails
