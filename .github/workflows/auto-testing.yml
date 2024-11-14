@@ -1,13 +1,12 @@
-name: Run Selenide Scripts
+name: Run Jazz Islam World Test
 
 on:
   schedule:
     - cron: '0 8,12,16 * * *'  # Runs at 8 AM, 12 PM, and 4 PM UTC
-      workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-  run-selenide:
-    JazzIslamWorldTest:
+  run-selenide-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,20 +16,30 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '17'
 
-      - name: Run Selenide Script
-        run: |
-          # Run your Selenide script
-          java -jar path/to/YourSelenideScript.jar
 
-      - name: Notify status
-        run: |
-          # Check status and send notification
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2
+
+      - name: Install dependencies
+        run: mvn install -DskipTests
+
+      - name: Run Selenide Test
+        run: mvn test -Dtest=com.jazzservices.demo.JazzIslamWorldTest
+        shell: bash
+
+      - name: Notify Status
+        if: always()
+        run:
           if [ $? -eq 0 ]; then
-            echo "Service is working"
-            # You can send a notification here, for example, using curl to post to a webhook
+            echo " Jazz Islam World is Working"
           else
-            echo "Service is down"
-            # Send a notification about failure
-          fi
+            echo " Jazz Islam World is not Working"
+
+
