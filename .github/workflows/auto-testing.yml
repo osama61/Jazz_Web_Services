@@ -1,59 +1,34 @@
-name: Selenide Test Automation
+name: Run Selenide Scripts
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   schedule:
-    - cron: '0 8,12,16 * * *'  # Runs at 8 AM, 12 PM, and 4 PM UTC daily
+    - cron: '0 8,12,16 * * *'  # Runs at 8 AM, 12 PM, and 4 PM UTC
 
 jobs:
-  test:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+  run-selenide:
+    runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the code
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Cache Maven dependencies
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      # Step 3: Set up JDK (adjust version as per pom.xml)
-      - name: Set up JDK 17
+      - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
-          distribution: 'adoptopenjdk'
+          java-version: '11'
 
-      # Step 4: Build the project using Maven (skipping tests initially)
-      - name: Build with Maven
-        run: mvn clean install -DskipTests
-
-      # Step 5: Run Selenide tests
-      - name: Run Selenide tests
-        run: mvn test
-        env:
-          API_KEY: ${{ secrets.API_KEY }}  # Example of using GitHub Secrets if required
-
-      # Step 6: Upload test results
-      - name: Upload test results
-        uses: actions/upload-artifact@v3  # Updated to v3
-        with:
-          name: test-results
-          path: target/allure-results  # This should match your Allure results path
-
-      # Step 7: Generate Allure Report
-      - name: Generate Allure report
+      - name: Run Selenide Script
         run: |
-          allure generate target/allure-results --clean -o target/allure-report
-        continue-on-error: true  # This allows the workflow to continue even if Allure fails
+          # Run your Selenide script
+          java -jar path/to/YourSelenideScript.jar
+
+      - name: Notify status
+        run: |
+          # Check status and send notification
+          if [ $? -eq 0 ]; then
+            echo "Service is working"
+            # You can send a notification here, for example, using curl to post to a webhook
+          else
+            echo "Service is down"
+            # Send a notification about failure
+          fi
