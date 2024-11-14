@@ -26,14 +26,17 @@ public class JazzIslamWorldTest {
     @Test
     void islamWorldSubUnsub() {
         open("http://islamworld.com.pk/phone");
+        sleep(3000);
 
         SelenideElement phoneInput = $(By.cssSelector("input[placeholder='3xx xxxx xxx']"));
         phoneInput.shouldBe(visible).sendKeys("3260754992");
 
         $(By.xpath("//button[normalize-space()='Get PIN']")).shouldBe(visible).click();
+        sleep(25000);
 
         // Wait for the Confirm button to appear before clicking it
         $(By.xpath("//button[normalize-space()='Confirm']")).shouldBe(visible).shouldBe(clickable).click();
+        sleep(15000);
 
         $(By.cssSelector("#dropdownMenu2")).shouldBe(visible).click();
 
