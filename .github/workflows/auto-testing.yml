@@ -16,7 +16,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          distribution: 'temurin'
+          java-version: '22'
 
 
       - name: Cache Maven dependencies
@@ -36,10 +37,14 @@ jobs:
 
       - name: Notify Status
         if: always()
-        run:
+        run: |
           if [ $? -eq 0 ]; then
-            echo " Jazz Islam World is Working"
+            echo "Jazz Islam World is Working"
           else
-            echo " Jazz Islam World is not Working"
+            echo "Jazz Islam World is not Working"
+          fi
+
+
+    
 
 
