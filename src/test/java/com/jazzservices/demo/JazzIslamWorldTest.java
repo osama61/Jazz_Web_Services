@@ -29,7 +29,7 @@ public class JazzIslamWorldTest {
         sleep(3000);
 
         SelenideElement phoneInput = $(By.cssSelector("input[placeholder='3xx xxxx xxx']"));
-        phoneInput.shouldBe(visible).sendKeys("3260754992");
+        phoneInput.shouldBe(visible).sendKeys("3095854562");
 
         $(By.xpath("//button[normalize-space()='Get PIN']")).shouldBe(visible).click();
         sleep(25000);
